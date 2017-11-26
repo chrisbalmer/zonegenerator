@@ -1,0 +1,12 @@
+resource "aws_route53_zone" "{domain_no_periods}" {{
+    name = "{domain}."
+    delegation_set_id = "${{aws_route53_delegation_set.delegation_ns_set.id}}"
+}}
+
+module "aws_r53_basic_zone_records_{domain_no_periods}" {{
+    source        = "git::https://github.com/chrisbalmer/aws_r53_basic_zone_records.git?ref=v0.2"
+
+    "zone_id"     = "${{aws_route53_zone.{domain_no_periods}.zone_id}}"
+    "domain_name" = "${{aws_route53_zone.{domain_no_periods}.name}}"
+    "root_ip"     = "${{var.http_redirect_ip}}"
+}}
